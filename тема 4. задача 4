@@ -1,0 +1,33 @@
+def thomas_algorithm(a, b, c, d):
+    n = len(d)
+    c_prime = np.zeros(n-1)
+    d_prime = np.zeros(n)
+
+    c_prime[0] = c[0] / b[0]
+    d_prime[0] = d[0] / b[0]
+
+    for i in range(1, n-1):
+        temp = b[i] - a[i] * c_prime[i-1]
+        c_prime[i] = c[i] / temp
+        d_prime[i] = (d[i] - a[i] * d_prime[i-1]) / temp
+
+    d_prime[-1] = (d[-1] - a[-1] * d_prime[-2]) / (b[-1] - a[-1] * c_prime[-2])
+
+    x = np.zeros(n)
+    x[-1] = d_prime[-1]
+
+    for i in range(n-2, -1, -1):
+        x[i] = d_prime[i] - c_prime[i] * x[i+1]
+
+    return x
+
+a = [-11, -8, 6, 4, 7]
+b = [9, 6, 15, 6, 10]
+c = [0, -6, 2, 4, 5]
+d = [-158, 66, -45, 24, -1]
+
+solution = thomas_algorithm(a, b, c, d)
+
+print("Решения системы методом прогонки:")
+for i, val in enumerate(solution):
+    print(f"x{i+1} = {val:.2f}")
